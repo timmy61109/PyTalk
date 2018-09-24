@@ -39,7 +39,6 @@ def EchoClient(ServerHost, ServerPort):
 		if s is None:#如果s = None
 			sys.exit(1)#離開程式
 
-		print "Listen of Host and Port: %s:%d"%(ServerHost, ServerPort)#Listen Host of ServerHost and ServerPort
 		data_len = 0
 		try:
 			conn, addr = s.accept()#將sockt「網路介面」的資訊放入conn，遠端連線資訊存入addr
@@ -65,10 +64,6 @@ def EchoData(conn, addr, ServerHost, ServerPort):
 			date1 = time.mktime(d.timetuple()) + 1e-6 * d.microsecond
 
 			ClientIP, ClientPort = addr
-			print "Incoming connection accepted: " + str(ClientIP) + ":" + str(ClientPort)#Client of IP and Port
-
-			print date, addr[0]#, ":", repr(data)#顯示時間、IP、Port、TCP資料
-			print ""
 			conn.send(data)
 		except KeyboardInterrupt:
 			#print "Closing Connection"
@@ -78,5 +73,5 @@ def EchoData(conn, addr, ServerHost, ServerPort):
 
 		conn.close()
 		ReprData = repr(data)
-		AllList = [date1, ClientIP, ClientPort, ServerHost, ServerPort, ReprData]
+		AllList = [date, date1, ClientIP, ClientPort, ServerHost, ServerPort, ReprData]
 		return AllList
