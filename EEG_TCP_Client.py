@@ -3,12 +3,9 @@
 # coding = UTF-8
 import TCP
 
-target_host = "127.0.0.1"
-target_port = 50007
+ServerHost = str(input("ServerHost:"))
+ServerPort = int(input("ServerPort:"))
 
 while(1):
-	TCP.EEG_TCP_Client(target_host, target_port, String)
-	Counter += 1
-	#TCP.EEG_TCP_Client(target_host, target_port, String2)
-	#Counter += 1
-	print "Counter", Counter
+	Message = str(input("Key Your Message:"))
+	TCP.EEG_TCP_Client(ServerHost, ServerPort, Message)
