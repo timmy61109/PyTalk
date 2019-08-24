@@ -2,76 +2,68 @@
 # -*- coding: utf-8 -*-
 # coding = UTF-8
 import socket
-import optparse
-import time
-import datetime
-import sys
-import DataBase
+import demjson
+try:
+    from ElectricPowerBlockchainSystem.ElectricEnergyLoadModule.BlockFile import blockfile
+except:
+    from BlockFile import blockfile
+bf = blockfile()
 
-def EEG_TCP_Client(target_host, target_port, string):
-	client = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 
-	client.connect((target_host, target_port))
+class network():
+    def __init__(self):
+        self.init_tcp = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+        self.server_run = True
+        self.read_blockchain_run = True
 
-	client.send(string)
+    def server(self, Host="0.0.0.0", Port=5000):
+        """
+        接受檔案傳送過來
+        """
+        with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as server:
+            server.setsockopt(socket.IPPROTO_TCP, socket.TCP_NODELAY, 1)
+            server.bind((Host, Port))  # 開始監聽的IP與Port
+            server.listen(5)  # 設定連線上限5個
+            while True:
+                conn, addr = server.accept()
+                with conn:
+                    while True:
+                        data = conn.recv(4096)
+                        if not data:
+                            break
+                        else:
+                            yield data.decode('utf8')
 
-	response = client.recv(4096)
-	client.close()
-	#print response
-	#print ""
-	return response
+    def client(self, Host="127.0.0.1", Port=5000, transaction_pack="test"):
+        with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as client:
+            client.connect((Host, Port))
+            client.sendall(transaction_pack.encode('utf8'))
 
-def EchoClient(ServerHost, ServerPort):
-	if ServerHost and ServerPort == "":
-		ServerHost, ServerPort = "", 50007
-	else:
-		#print "TCP Echo Data"
-		s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-		s.setsockopt(socket.IPPROTO_TCP, socket.TCP_NODELAY, 1)
-		try:
-			s.bind((ServerHost, ServerPort))#開始監聽的IP與Port
-			s.listen(1)#設定連線上限1個
-		except socket.error, msg:
-			print "ERROR: ", msg#顯示錯誤，
-			s.close()
-			s = None
+    def blockchain_client(
+            self, Host="127.0.0.1", Port=6000,
+            Path='../Data/objects/'):
+        blockchain = bf.read_blockchain(path=Path)
+        for block in blockchain:
+            self.client(Host=Host, Port=Port, transaction_pack=block)
+        self.client(Host=Host, Port=Port, transaction_pack="None")
 
-		if s is None:#如果s = None
-			sys.exit(1)#離開程式
-
-		data_len = 0
-		try:
-			conn, addr = s.accept()#將sockt「網路介面」的資訊放入conn，遠端連線資訊存入addr
-		except KeyboardInterrupt:
-			print "Closing Connection"
-			s.close()
-			s = None
-			sys.exit(1)
-		s.close()
-		AllList = [conn, addr, ServerHost, ServerPort]
-		return AllList
-
-def EchoData(conn, addr, ServerHost, ServerPort):
-	if conn and addr == "":
-		conn, addr = EchoClient()
-	else:
-		try:
-			data = conn.recv(4096)#將EEG送來的資料存入date變數裡面
-			#if not data:break
-
-			date =  time.strftime("%Y/%m/%d %H:%M:%S")
-			d = datetime.datetime.strptime(date, '%Y/%m/%d %H:%M:%S')
-			date1 = time.mktime(d.timetuple()) + 1e-6 * d.microsecond
-
-			ClientIP, ClientPort = addr
-			conn.send(data)
-		except KeyboardInterrupt:
-			#print "Closing Connection"
-			s.close()
-			s = None
-			sys.exit(1)
-
-		conn.close()
-		ReprData = repr(data)
-		AllList = [date, date1, ClientIP, ClientPort, ServerHost, ServerPort, ReprData]
-		return AllList
+    def blockchain_server(self, Host="0.0.0.0", Port=6000):
+        """
+        接受檔案傳送過來
+        """
+        with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as server:
+            server.setsockopt(socket.IPPROTO_TCP, socket.TCP_NODELAY, 1)
+            server.bind((Host, Port))  # 開始監聽的IP與Port
+            server.listen(5)  # 設定連線上限5個
+            blockchain = list()
+            while True:
+                conn, addr = server.accept()
+                with conn:
+                    while True:
+                        data = conn.recv(4096)
+                        if not data:
+                            yield blockchain
+                            break
+                        else:
+                            block = data.decode('utf8')
+                            blockchain.append(block)
