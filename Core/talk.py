@@ -3,7 +3,6 @@
 # coding = UTF-8
 from .Communication import tcp
 
-
 tcp = tcp()
 
 
@@ -11,24 +10,21 @@ class talk():
     def __init__(self):
         self.version = "0.0.1"
 
-    def accept_message(self):
-        server_host, server_port = "0.0.0.0", 5000
-        data = tcp.server(Host=server_host, Port=server_port)
+    def accept_message(self, host="0.0.0.0", port=5000, charset="utf8"):
+        data = tcp.server(Host=host, Port=port, Charset=charset)
         while True:
             message = next(data)
             if message == "None":
                 break
             else:
-                print(message)
+                yield message
 
-    def send_message(self):
-        server_host = str(input("Server Host:"))
-        server_port = int(input("Server Port:"))
+    def send_message(self, host="127.0.0.1", port=5000, charset="utf8"):
         while True:
             message = str(input("You:"))
             if message == "None":
-                print("exit")
+                yield "exit"
                 break
             else:
-                tcp.client(Host=server_host, Port=server_port, message=message)
-                print("success")
+                tcp.client(Host=host, Port=port,
+                           message=message, Charset=charset)
