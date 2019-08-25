@@ -8,7 +8,7 @@ class tcp():
     def __init__(self):
         self.init_tcp = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 
-    def server(self, Host="0.0.0.0", Port=5000):
+    def server(self, Host="0.0.0.0", Port=5000, Charset="utf8"):
         """
         接受檔案傳送過來
         """
@@ -21,12 +21,13 @@ class tcp():
                 with conn:
                     while True:
                         data = conn.recv(4096)
-                        if not data:
+                        if not data or data.decode(Charset) == "None":
                             break
                         else:
-                            yield data.decode('utf8')
+                            yield data.decode(Charset)
 
-    def client(self, Host="127.0.0.1", Port=5000, message="test"):
+    def client(self, Host="127.0.0.1", Port=5000, message="test",
+               Charset="utf8"):
         with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as client:
             client.connect((Host, Port))
-            client.sendall(message.encode('utf8'))
+            client.sendall(message.encode(Charset))
