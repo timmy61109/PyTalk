@@ -7,5 +7,5 @@ server_host = str(input("ServerHost:"))
 server_port = int(input("ServerPort:"))
 
 while True:
-    Message = str(input("Key Your Message:"))
-    tcp.client(server_port, server_host, Message)
+    message = str(input("Key Your Message:"))
+    tcp.client(Host=server_host, Port=server_port, message=message)
