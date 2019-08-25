@@ -3,9 +3,14 @@
 # coding = UTF-8
 from Module.Communication import tcp
 
-server_host = str(input("ServerHost:"))
-server_port = int(input("ServerPort:"))
 
+tcp = tcp()
+server_host = str(input("Server Host:"))
+server_port = int(input("Server Port:"))
 while True:
     message = str(input("Key Your Message:"))
-    tcp.client(Host=server_host, Port=server_port, message=message)
+    if message == "None":
+        print("exit")
+    else:
+        tcp.client(Host=server_host, Port=server_port, message=message)
+        print(message)

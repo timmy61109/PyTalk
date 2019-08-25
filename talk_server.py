@@ -3,8 +3,12 @@
 # coding = UTF-8
 from Module.Communication import tcp
 
-server_host, server_port = "", 50000
+tcp = tcp()
+server_host, server_port = "0.0.0.0", 5000
 data = tcp.server(Host=server_host, Port=server_port)
 while True:
     message = next(data)
-    print(message)
+    if message == "None":
+        break
+    else:
+        print(message)
