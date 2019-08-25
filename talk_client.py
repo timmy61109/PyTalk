@@ -1,11 +1,11 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 # coding = UTF-8
-import TCP
+from Module.Communication import tcp
 
-ServerHost = str(input("ServerHost:"))
-ServerPort = int(input("ServerPort:"))
+server_host = str(input("ServerHost:"))
+server_port = int(input("ServerPort:"))
 
-while(1):
-	Message = str(input("Key Your Message:"))
-	TCP.EEG_TCP_Client(ServerHost, ServerPort, Message)
+while True:
+    Message = str(input("Key Your Message:"))
+    tcp.client(server_port, server_host, Message)
