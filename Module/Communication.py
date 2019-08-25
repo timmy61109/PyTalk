@@ -10,11 +10,9 @@ except:
 bf = blockfile()
 
 
-class network():
+class tcp():
     def __init__(self):
         self.init_tcp = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-        self.server_run = True
-        self.read_blockchain_run = True
 
     def server(self, Host="0.0.0.0", Port=5000):
         """
