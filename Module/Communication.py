@@ -26,7 +26,7 @@ class tcp():
                         else:
                             yield data.decode('utf8')
 
-    def client(self, Host="127.0.0.1", Port=5000, transaction_pack="test"):
+    def client(self, Host="127.0.0.1", Port=5000, message="test"):
         with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as client:
             client.connect((Host, Port))
-            client.sendall(transaction_pack.encode('utf8'))
+            client.sendall(message.encode('utf8'))
