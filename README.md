@@ -33,6 +33,8 @@ Peer-to-peer or central talk program written in Python.
         - SIV mode
         - OCB mode
 
-支援的非對稱性加密演算法:
-- RSA
-- ECC
+- 「非對稱性加密演算法」(Asymmetric ciphers):
+  - RSA
+  - ECC
+
+- Hybrid ciphers:結合兩者
