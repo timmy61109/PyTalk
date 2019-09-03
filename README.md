@@ -7,16 +7,18 @@ Peer-to-peer or central talk program written in Python.
 - fastecdsa
 - pycryptodome
 
-支援的加密演算法
+支援的加密演算法:
 - 「對稱性加密演算法」(Symmetric ciphers)
     - 「串流加密法」(Stream ciphers)
-      - ChaCha20
-      - XChaCha20
-      - Salsa20
+      - ciphers
+        - ChaCha20
+        - XChaCha20
+        - Salsa20
       - authentication (MAC)
         - Poly1305
     - 「區塊加密法」(Block ciphers)
-      - AES
+      - Ciphers
+        - AES
       - Classic modes of operation
         - ECB mode
         - CBC mode
