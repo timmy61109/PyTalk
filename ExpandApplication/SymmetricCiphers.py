@@ -18,17 +18,19 @@ class stream_ciphers():
         self.__nonce = nonce
         self.__initial_value = initial_value
         self.__counter = counter
+        self.__items = None
 
     def encrypt(self, message="test"):
+        """aaa."""
         cipher, iv, segment_size, nonce, initial_value, counter = next(
             self.encrypt_method)
         message = message.encode('utf8')
-        if self.items[2] == "cfb":
+        if self.__items[2] == "cfb":
             ct_bytes = cipher.encrypt(pad(message, AES.block_size))
         else:
             ct_bytes = cipher.encrypt(message)
 
-        ct = b64encode(ct_bytes).decode('utf-8')
+        ct_b64 = b64encode(ct_bytes).decode('utf-8')
 
         result = {
             'iv': self.__iv,
@@ -36,7 +38,7 @@ class stream_ciphers():
             'nonce': self.__nonce,
             'initial_value': self.__initial_value,
             'counter': self.__counter,
-            'ciphertext': ct,
+            'ciphertext': ct_b64,
         }
 
         result = json.dumps(result)
@@ -63,12 +65,12 @@ class stream_ciphers():
                 nonce=nonce,
                 initial_value=initial_value,
                 counter=counter
-            )
+                )
 
             cipher, iv, segment_size, nonce, initial_value, counter = next(
                 self.encrypt_method)
 
-            if self.items[2] == "":
+            if self.__items[2] == "cfb":
                 pt = unpad(cipher.decrypt(ct), AES.block_size)
             else:
                 pt = cipher.decrypt(ct)
@@ -88,7 +90,7 @@ class stream_ciphers():
         if len(self.__key) % 8 != 0:
             raise ValueError('金鑰長度必須是符合8的倍數')
 
-        self.items = items = self.__encrypt_method.split("-")
+        self.__items = items = self.__encrypt_method.split("-")
         if items[1] == len(self.__key) * 16:
             raise ValueError('不符合金鑰設定的位元長度')
 
