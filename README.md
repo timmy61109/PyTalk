@@ -6,6 +6,7 @@ Peer-to-peer or central talk program written in Python.
 使用Python3.6，並且使用以下套件:
 - fastecdsa
 - pycryptodome
+- socket
 
 支援的加密演算法:
 - 「對稱性加密演算法」(Symmetric ciphers)
