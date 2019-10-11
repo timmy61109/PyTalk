@@ -31,19 +31,11 @@ steps:
 
 - script: |
     python -m pip install flake8
-<<<<<<< HEAD
     flake8 ../
-=======
-    flake8 .
->>>>>>> master
-  displayName: 'Run lint tests'
+  displayName: 'Run lint flake8'
 
 - script: |
     pip install pytest
     pip install pytest-cov
-<<<<<<< HEAD
     pytest ../
-=======
-    pytest tests --doctest-modules --junitxml=junit/test-results.xml --cov=com --cov-report=xml --cov-report=html
->>>>>>> master
   displayName: 'Test with pytest'
