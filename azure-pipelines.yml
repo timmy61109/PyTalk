@@ -36,6 +36,5 @@ steps:
 
 - script: |
     pip install pytest
-    pip install pytest-cov
     pytest ../
   displayName: 'Test with pytest'
